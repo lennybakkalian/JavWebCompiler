@@ -17,6 +17,15 @@ exit
 :foundjavac
 echo [INFO] JDK %CurVer% gefunden! compiler: %javacfile%
 if not %CurVer% == 1.8 echo [WARNING] Es ist nicht die 1.8 JDK Version installiert! Es kann zu fehlern beim compilieren kommen! & timeout 3 >NUL
+REM download latest JavWeb if src folder dont exist
+if exist src echo [INFO] Found src folder & goto foundsrc
+where git >NUL
+IF %errorlevel% NEQ 0 echo [ERROR] Please install git! & timeout 5 /nobreak>NUL & exit 
+git clone https://github.com/lennybakkalian/JavWeb
+REM copy src folder and version file to root directory
+move JavWeb/src src >NUL
+rmdir /S /Q JavWeb >NUL
+:foundsrc
 if exist build rmdir /s /q build & echo [INFO] Deleting old /build directory
 mkdir build
 echo [INFO] Compiling %cd%/src/*
